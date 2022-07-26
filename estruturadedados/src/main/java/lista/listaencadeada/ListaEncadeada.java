@@ -160,10 +160,9 @@ public class ListaEncadeada<T> extends Lista<T> {
         No<T> noAuxiliar = inicio;
 
         for (int i = 0; i < qtd; i++) {
-            strRetorno += "[No{conteudo=" + noAuxiliar.conteudo + "}]--->";
+            strRetorno += "\n[No\nPilha: " + noAuxiliar.conteudo + "\n]===== ";
             noAuxiliar = noAuxiliar.proximoNo;
         }
-        strRetorno += "null";
         return strRetorno;
     }
 

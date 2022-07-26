@@ -8,10 +8,14 @@ public class FilaProva<T> implements IFila<T> {
 
     public No<T> refEntrada;
     public int qtd = 0;
+    public int max;
+
 
     public FilaProva() {
         this.refEntrada = null;
+        this.max = 10;
     }
+
 
     @Override
     public void incluir(T valor) throws FilaCheiaException {
@@ -32,7 +36,7 @@ public class FilaProva<T> implements IFila<T> {
                     primeiroNo = primeiroNo.getProximoNo();
                     qtd--;
                 } else {
-                    noAuxiliar.setConteudo(null);
+                    noAuxiliar.setProximoNo((null));
                     qtd--;
                     break;
                 }
@@ -75,4 +79,18 @@ public class FilaProva<T> implements IFila<T> {
         }
         return stringRetorno;
     }
+
+    public No<T> getRefEntrada() {
+        return refEntrada;
+    }
+
+    public void setRefEntrada(No<T> refEntrada) {
+        this.refEntrada = refEntrada;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    
 }

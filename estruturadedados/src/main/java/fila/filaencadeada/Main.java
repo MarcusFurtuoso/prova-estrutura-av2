@@ -14,14 +14,13 @@ public class Main {
 
         System.out.println(minhaFila);
 
-        // System.out.println(minhaFila.remover());
+        System.out.println(minhaFila.remover());
 
         System.out.println(minhaFila.getQtd());
 
-        // minhaFila.incluir("ultimo");
-        minhaFila.remover();
+        // minhaFila.remover();
        
-        System.out.println(minhaFila.getQtd());
+        // System.out.println(minhaFila.getQtd());
         System.out.println(minhaFila);
     }
 }
