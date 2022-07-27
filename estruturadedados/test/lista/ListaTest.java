@@ -10,7 +10,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 abstract class ListaTest {
 
-    Lista<Integer> lista = new ListaEncadeada<>();
+    ListaEncadeada<Integer> lista = new ListaEncadeada<>();
 
 
 

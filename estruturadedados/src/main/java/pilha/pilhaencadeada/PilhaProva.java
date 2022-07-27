@@ -4,6 +4,7 @@ import main.java.comum.ParametroInvalidoException;
 import main.java.fila.exception.FilaCheiaException;
 import main.java.fila.exception.FilaVaziaException;
 import main.java.fila.filaencadeada.FilaProva;
+import main.java.fila.filaencadeada.No;
 import main.java.lista.Lista;
 import main.java.lista.listaencadeada.ListaEncadeada;
 import main.java.pilha.IPilha;
@@ -18,7 +19,7 @@ public class PilhaProva<T> implements IPilha<T> {
     int tamanhoMax;
 
     public PilhaProva() {
-        this.tamanhoMax = 2;
+        this.tamanhoMax = 10;
     }
 
     public Lista<PilhaProva<T>> obterListaPilhas(FilaProva<T> fila, int qtdDePilhas)
@@ -27,14 +28,27 @@ public class PilhaProva<T> implements IPilha<T> {
             ParametroInvalidoException, Exception {
 
         Lista<PilhaProva<T>> lista = new ListaEncadeada<>();
-
-        int quociente = fila.getQtd() / qtdDePilhas;
-        int restoDiv = fila.getQtd() % qtdDePilhas;
-        int capacidadeMaior = quociente + restoDiv;
-
         int qtdFila = fila.getQtd();
+                
+            if(qtdFila == 0) {
+                throw new FilaVaziaException("A fila está vazia");
+            }
+            if(qtdDePilhas == 0) {
+                throw new ParametroInvalidoException("obterListaPilhas");
+            }
+            if(qtdDePilhas < 0) {
+                throw new ParametroInvalidoException("obterListaPilhas");
+            }
+             if(qtdDePilhas > qtdFila) {
+                throw new ParametroInvalidoException("obterListaPilhas");
+            }
 
-        if (qtdFila != 0) {
+        
+        int divFilaPorPilhas = qtdFila / qtdDePilhas;
+        int restoDiv = fila.getQtd() % qtdDePilhas;
+        int maiorTamanho = divFilaPorPilhas + restoDiv;
+
+        if (!estahVazia()) {
             for (int i = 0; i < qtdFila; i++) {
                 empilhar(fila.remover());
             }
@@ -42,101 +56,65 @@ public class PilhaProva<T> implements IPilha<T> {
                 if (restoDiv == 0) {
                     for (int i = 0; i < qtdDePilhas; i++) {
                         PilhaProva<T> pilha = new PilhaProva<>();
-                        for (int j = 0; j < quociente; j++) {
+                        for (int j = 0; j < divFilaPorPilhas; j++) {
                             pilha.empilhar(desempilhar());
                         }
                         lista.incluirInicio(pilha);
                     }
                 } else {
                     PilhaProva<T> pilha = new PilhaProva<>();
-                    for (int j = 0; j < capacidadeMaior; j++) {
+                    for (int j = 0; j < maiorTamanho; j++) {
                         pilha.empilhar(desempilhar());
                     }
                     lista.incluirInicio(pilha);
 
                     for (int i = 0; i < qtdDePilhas - 1; i++) {
                         pilha = new PilhaProva<>();
-                        for (int j = 0; j < quociente; j++) {
+                        for (int j = 0; j < divFilaPorPilhas; j++) {
                             pilha.empilhar(desempilhar());
                         }
                         lista.incluirInicio(pilha);
                     }
                 }
-            } else {
-                throw new ParametroInvalidoException("obterListaPilhas");
-            }
-        } else {
-            throw new FilaVaziaException("A fila está vazia");
-        }
-
+            } 
+        } 
         return lista;
-
-    }
-
-    public Lista<PilhaProva<T>> obterBr(FilaProva<T> fila, int qtdDePilhas)
-            throws FilaCheiaException, FilaVaziaException,
-            PilhaCheiaException, PilhaVaziaException,
-            ParametroInvalidoException, Exception {
-
-        if (fila.estaVazia())
-            throw new FilaVaziaException("A fila está vazia");
-        if (qtdDePilhas < 1)
-            throw new ParametroInvalidoException("obterListaPilhas");
-        if (fila.getQtd() < qtdDePilhas)
-            throw new ParametroInvalidoException("obterListaPilhas");
-
-        int quociente = fila.getQtd() / qtdDePilhas;
-        int resto = fila.getQtd() % qtdDePilhas;
-        int capacidadeMaior = quociente + resto;
-
-        PilhaProva<T> pilhaAux = new PilhaProva<>(); // recebe a fila
-
-        for (int i = 0; i < fila.max; i++) {
-            pilhaAux.empilhar((T) fila.getRefEntrada().getProximoNo());
-        }
-
-        Lista<PilhaProva<T>> listaDePilhas = new ListaEncadeada<>();
-
-        if (resto == 0) {
-
-            for (int i = 0; i < qtdDePilhas; i++) {
-
-                PilhaProva<T> pilha = new PilhaProva<>();
-                for (int j = 0; j < quociente; j++) {
-                    pilha.empilhar(pilhaAux.desempilhar());
-                }
-                listaDePilhas.incluirInicio(pilha);
-            }
-        } else {
-
-            PilhaProva<T> pilha = new PilhaProva<>();
-            for (int j = 0; j < capacidadeMaior; j++) {
-                pilha.empilhar(pilhaAux.desempilhar());
-            }
-            listaDePilhas.incluirInicio(pilha);
-
-            for (int i = 0; i < qtdDePilhas - 1; i++) {
-
-                pilha = new PilhaProva<>();
-                for (int j = 0; j < quociente; j++) {
-                    pilha.empilhar(pilhaAux.desempilhar());
-                }
-                listaDePilhas.incluirInicio(pilha);
-            }
-
-        }
-
-        return listaDePilhas;
     }
 
     public boolean temConteudoIgual(FilaProva<T> fila) throws FilaCheiaException, FilaVaziaException,
             PilhaCheiaException, PilhaVaziaException,
             ParametroInvalidoException {
-        throw new ParametroInvalidoException("temConteudoIgual");
+
+        if (fila == null)
+        return false;
+
+        boolean retorno = true;
+
+        if (fila.estaVazia() || this.estahVazia()) {
+            retorno = false;
+        } else {
+            No<T> noAux = inicio;
+            while (noAux.proximoNo != null) {
+                for (int j = 0; j < fila.qtd; j++) {
+                    No<T> noFila = fila.getInicio();
+                    while (noFila.proximoNo != null) {
+                        if (!noAux.conteudo.equals(noFila)) {
+                            retorno = false;
+                        }
+                        noFila = noFila.proximoNo;
+                    }
+                }
+                noAux = noAux.proximoNo;
+            }
+        }
+        return retorno ;
     }
 
     @Override
     public void empilhar(T valor) throws PilhaCheiaException {
+        if (this.qtd == this.tamanhoMax) {
+            throw new PilhaCheiaException("A pilha está cheia");
+        }
         if (inicio == null) {
             inicio = new No<>(valor);
         }
@@ -168,7 +146,7 @@ public class PilhaProva<T> implements IPilha<T> {
 
     @Override
     public boolean estahVazia() {
-        return inicio == null;
+        return this.qtd == 0 ? true : false;
     }
 
     public String toString() {
@@ -184,8 +162,8 @@ public class PilhaProva<T> implements IPilha<T> {
     }
 
     private void verificaPilhaVazia() throws PilhaVaziaException {
-        if (this.inicio == null) {
-            throw new PilhaVaziaException("A pilha está vazia!");
+        if (this.qtd == 0) {
+            throw new PilhaVaziaException("A pilha está vazia");
         }
     }
 

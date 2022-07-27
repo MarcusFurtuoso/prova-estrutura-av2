@@ -8,19 +8,17 @@ public class Main {
         FilaProva<String> minhaFila = new FilaProva<>();
 
         minhaFila.incluir("primeiro");
-        // minhaFila.incluir("segundo");
-        // minhaFila.incluir("terceiro");
-        // minhaFila.incluir("quarto");
-
-        System.out.println(minhaFila);
-
-        System.out.println(minhaFila.remover());
-
+        minhaFila.incluir("segundo");
+        minhaFila.incluir("terceiro");
+        minhaFila.incluir("quarto");
+        minhaFila.imptimir();
+        // System.out.println(minhaFila.remover());
+        minhaFila.limpar();
         System.out.println(minhaFila.getQtd());
+        minhaFila.imptimir();
+        // System.out.println(minhaFila.remover());
+        // System.out.println(minhaFila.remover());
 
-        // minhaFila.remover();
-       
-        // System.out.println(minhaFila.getQtd());
-        System.out.println(minhaFila);
+
     }
 }
